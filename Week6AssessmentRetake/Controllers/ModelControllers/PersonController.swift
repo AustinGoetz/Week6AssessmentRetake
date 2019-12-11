@@ -15,7 +15,7 @@ class PersonController {
     
     // MARK: - SoT's
     var persons: [Person] = []
-    var personPairs: [[Person]] = []
+    var pairs: [[Person]] = []
     
     // MARK: - CRUD
     // Create
@@ -37,6 +37,24 @@ class PersonController {
     
     // MARK: - Create Pairs
     
+    func createRandomPairs() {
+        let shuffledPersons = persons.shuffled()
+        var onePairArray: [Person] = []
+        var arrayOfPairs: [[Person]] = []
+        
+        for person in shuffledPersons {
+            if onePairArray.count < 2 {
+                onePairArray.append(person)
+            } else {
+                arrayOfPairs.append(onePairArray)
+                onePairArray = []
+                onePairArray.append(person)
+            }
+        }
+        
+        arrayOfPairs.append(onePairArray)
+        pairs = arrayOfPairs
+    }
     
     // MARK: - Persistence
     
