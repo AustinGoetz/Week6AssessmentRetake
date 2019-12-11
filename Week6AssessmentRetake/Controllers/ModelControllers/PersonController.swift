@@ -24,7 +24,7 @@ class PersonController {
         
         persons.append(newPerson)
         
-        // Save
+        saveToPersistentStore()
     }
     
     func removePerson(_ person: Person) {
@@ -32,7 +32,7 @@ class PersonController {
         
         persons.remove(at: indexOfPersonToBeRemoved)
         
-        // Save
+        saveToPersistentStore()
     }
     
     // MARK: - Create Pairs
@@ -40,5 +40,36 @@ class PersonController {
     
     // MARK: - Persistence
     
-
+    // Create JSON file
+    func createFileURLForPersistence() -> URL {
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let fileURL = urls[0].appendingPathComponent("Week6AssessmentRetake.json")
+        
+        return fileURL
+    }
+    
+    // Save
+    func saveToPersistentStore() {
+        let jsonEncoder = JSONEncoder()
+        
+        do {
+            let personJSON = try jsonEncoder.encode(persons)
+            try personJSON.write(to: createFileURLForPersistence())
+        } catch {
+            print("Error in \(#function) : \(error.localizedDescription) \n---\n \(error)")
+        }
+    }
+    
+    // Load
+    func loadFromPersistentStore() {
+        let jsonDecoder = JSONDecoder()
+        
+        do {
+            let jsonData = try Data(contentsOf: createFileURLForPersistence())
+            let decodedPerson = try jsonDecoder.decode([Person].self, from: jsonData)
+            persons = decodedPerson
+        } catch {
+            print("Error in \(#function) : \(error.localizedDescription) \n---\n \(error)")
+        }
+    }
 }
