@@ -14,10 +14,7 @@ class RandomPairsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         PersonController.shared.loadFromPersistentStore()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        PersonController.shared.createRandomPairs()
     }
     
     // MARK: - Actions
@@ -61,8 +58,15 @@ class RandomPairsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            
+            let personToDelete = PersonController.shared.persons[indexPath.row]
+            PersonController.shared.pairs[indexPath.section].remove(at: indexPath.row)
+            PersonController.shared.removePerson(personToDelete)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            if PersonController.shared.pairs[indexPath.section].count == 0 {
+                PersonController.shared.pairs.remove(at: indexPath.section)
+                tableView.deleteSections([indexPath.section], with: .fade)
+            }
         }
     }
 
