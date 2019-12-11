@@ -41,13 +41,11 @@ class RandomPairsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return PersonController.shared.pairs[section].count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "personCell", for: indexPath)
-
         let pair = PersonController.shared.pairs[indexPath.section]
         let personToDisplay = pair[indexPath.row]
         
