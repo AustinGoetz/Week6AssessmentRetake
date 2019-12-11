@@ -14,9 +14,14 @@ class RandomPairsTableViewController: UITableViewController {
         super.viewDidLoad()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
     // MARK: - Actions
     
     @IBAction func addButtonTapped(_ sender: Any) {
+        presentAddPersonViewController()
     }
     
     @IBAction func randomizeButtonTapped(_ sender: Any) {
@@ -71,4 +76,26 @@ class RandomPairsTableViewController: UITableViewController {
     }
     */
     
+    // MARK: - Helpers
+    func presentAddPersonViewController() {
+        let alertController = UIAlertController(title: "Add Person", message: "Add someone new to the list", preferredStyle: .alert)
+        let addButton = UIAlertAction(title: "Add", style: .default) { (action) in
+            guard let newPerson = alertController.textFields?[0].text else { return }
+            
+            PersonController.shared.addPerson(name: newPerson)
+            PersonController.shared.createRandomPairs()
+            self.tableView.reloadData()
+        }
+        
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        alertController.addTextField { (textField) in
+            textField.placeholder = "Name"
+            textField.autocapitalizationType = .words
+        }
+        
+        alertController.addAction(addButton)
+        alertController.addAction(cancelButton)
+        present(alertController, animated: true)
+    }
 }
